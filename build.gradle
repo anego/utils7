@@ -1,13 +1,14 @@
 
-group = 'io.github.anego'
-version = '1.0-SNAPSHOT'
+group = thisGroup
+version = thisVersion
 
 apply plugin: 'java-library'
 apply plugin: 'eclipse'
 apply plugin: 'maven'
+apply plugin: 'jacoco'
 
 ext {
-	projectname = 'utils7'
+	projectname = thisName
 	defaultEncoding = 'UTF-8'
 	jdkVersion = 1.7
 }
@@ -63,9 +64,9 @@ uploadArchives {
 	repositories {
 		mavenDeployer {
 			repository url: "file://${projectDir}/repository"
-			pom.version = '1.0.0'
-			pom.groupId = 'io.github.anego'
-			pom.artifactId = 'utils7'
+			pom.version = thisVersion
+			pom.groupId = thisGroup
+			pom.artifactId = thisName
 		}
 	}
 }

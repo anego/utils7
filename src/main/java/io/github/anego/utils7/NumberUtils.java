@@ -1,8 +1,9 @@
-package io.github.anego.utils;
+package io.github.anego.utils7;
 
 import java.math.BigDecimal;
+import java.text.Normalizer;
+
 import org.apache.commons.lang3.StringUtils;
-import lombok.NoArgsConstructor;
 
 /**
  * 数値系オブジェクトのユーティリティ.
@@ -10,8 +11,9 @@ import lombok.NoArgsConstructor;
  * @author anego &#60;anego@project-life.net&#62;
  *
  */
-@NoArgsConstructor
 public final class NumberUtils {
+
+	private NumberUtils() {}
 
     /**
      * <p>
@@ -78,7 +80,7 @@ public final class NumberUtils {
      *         false:1以上
      */
     public static boolean isEmpty(final Long val) {
-        if (val == null || val.intValue() < 0) {
+        if (val == null || val.longValue() < 0) {
             return true;
         }
 
@@ -313,7 +315,26 @@ public final class NumberUtils {
      * @return 変換後数値
      */
     public static int toInt(final String val) {
-        return org.apache.commons.lang3.math.NumberUtils.toInt(val);
+
+        if (val == null) {
+            return 0;
+        }
+
+        String str = Normalizer.normalize(val, Normalizer.Form.NFKC);
+
+        if (!org.apache.commons.lang3.math.NumberUtils.isCreatable(str)) {
+            return 0;
+        }
+
+        BigDecimal decimal = new BigDecimal(val);
+        double dbl = decimal.doubleValue();
+        if (dbl > Integer.MAX_VALUE) {
+            return Integer.MAX_VALUE;
+        } else if (dbl < Integer.MIN_VALUE) {
+            return Integer.MIN_VALUE;
+        }
+
+        return decimal.intValue();
     }
 
     /**
@@ -350,8 +371,19 @@ public final class NumberUtils {
      * @return 変換後
      */
     public static int toInt(final Integer val) {
+        return NumberUtils.toInt(val,0);
+    }
+
+    /**
+     * IntegerをNULLチェックしてintに変換.
+     *
+     * @param val 変換する数値
+     * @param defaultValue NULLの場合のデフォルト値
+     * @return 変換後
+     */
+    public static int toInt(final Integer val, final int defaultValue) {
         if (val == null) {
-            return 0;
+            return defaultValue;
         }
         return val.intValue();
     }
@@ -363,8 +395,20 @@ public final class NumberUtils {
      * @return 変換後
      */
     public static int toInt(final Long val) {
+
+        return NumberUtils.toInt(val, 0);
+    }
+
+    /**
+     * LongをNULLチェックしてintにするだけ.
+     *
+     * @param val 変換する数値
+     * @param defaultValue NULLの場合のデフォルト値
+     * @return 変換後
+     */
+    public static int toInt(final Long val, final int defaultValue) {
         if (val == null) {
-            return 0;
+            return defaultValue;
         }
 
         return val.intValue();
@@ -410,8 +454,10 @@ public final class NumberUtils {
      */
     public static Short toShort(int val) {
 
-        if (val > Short.MAX_VALUE) {
+    	if (val > Short.MAX_VALUE) {
             return Short.valueOf(Short.MAX_VALUE);
+        } else if (val < Short.MIN_VALUE) {
+            return Short.valueOf(Short.MIN_VALUE);
         }
 
         return Short.valueOf((short) val);
@@ -453,14 +499,15 @@ public final class NumberUtils {
      */
     public static Short toShort(Integer val, short defaultval) {
 
-        if (val == null) {
+    	if (val == null) {
             return Short.valueOf(defaultval);
-        }
-        if (val.intValue() > Short.MAX_VALUE) {
+        } else if (val.intValue() > Short.MAX_VALUE) {
             return Short.valueOf(Short.MAX_VALUE);
+        } else if (val.intValue() < Short.MIN_VALUE) {
+            return Short.valueOf(Short.MIN_VALUE);
         }
 
-        return Short.valueOf((short) val.intValue());
+        return Short.valueOf(val.shortValue());
     }
 
     /**
@@ -470,6 +517,12 @@ public final class NumberUtils {
      * @return 変換後数値
      */
     public static Short toShort(long val) {
+
+    	if (val > Short.MAX_VALUE) {
+            return Short.valueOf(Short.MAX_VALUE);
+        } else if (val < Short.MIN_VALUE) {
+            return Short.valueOf(Short.MIN_VALUE);
+        }
 
         return Short.valueOf(Long.valueOf(val).shortValue());
     }
@@ -481,8 +534,12 @@ public final class NumberUtils {
      * @return 変換後数値
      */
     public static Short toShort(Long val) {
-        if (val == null) {
-            return Short.valueOf((short) 0);
+    	if (val == null) {
+            return null;
+        } else if (val.longValue() > Short.MAX_VALUE) {
+            return Short.valueOf(Short.MAX_VALUE);
+        } else if (val.longValue() < Short.MIN_VALUE) {
+            return Short.valueOf(Short.MIN_VALUE);
         }
 
         return Short.valueOf(val.shortValue());
@@ -496,10 +553,24 @@ public final class NumberUtils {
      */
     public static Short toShort(final String val) {
         if (StringUtils.isBlank(val)) {
-            return Short.valueOf((short) 0);
+            return null;
         }
 
-        return Short.valueOf(org.apache.commons.lang3.math.NumberUtils.toShort(val));
+        String str = Normalizer.normalize(val, Normalizer.Form.NFKC);
+
+        if (!org.apache.commons.lang3.math.NumberUtils.isCreatable(str)) {
+            return null;
+        }
+
+        BigDecimal decimal = new BigDecimal(val);
+        double dbl = decimal.doubleValue();
+        if (dbl > Short.MAX_VALUE) {
+            return Short.valueOf(Short.MAX_VALUE);
+        } else if (dbl < Short.MIN_VALUE) {
+            return Short.valueOf(Short.MIN_VALUE);
+        }
+
+        return Short.valueOf(decimal.shortValue());
     }
 
     /**
@@ -511,8 +582,25 @@ public final class NumberUtils {
      */
     public static Short toShort(final String val, final int defaultValue) {
 
-        return Short.valueOf(
-                org.apache.commons.lang3.math.NumberUtils.toShort(val, (short) defaultValue));
+        if (StringUtils.isBlank(val)) {
+            return Short.valueOf((short) defaultValue);
+        }
+
+        String str = Normalizer.normalize(val, Normalizer.Form.NFKC);
+
+        if (!org.apache.commons.lang3.math.NumberUtils.isCreatable(str)) {
+            return Short.valueOf((short) defaultValue);
+        }
+
+        BigDecimal decimal = new BigDecimal(val);
+        double dbl = decimal.doubleValue();
+        if (dbl > Short.MAX_VALUE) {
+            return Short.valueOf(Short.MAX_VALUE);
+        } else if (dbl < Short.MIN_VALUE) {
+            return Short.valueOf(Short.MIN_VALUE);
+        }
+
+        return Short.valueOf(decimal.shortValue());
     }
 
     /**
@@ -557,7 +645,13 @@ public final class NumberUtils {
      */
     public static Integer toInteger(final long val) {
 
-        return new Integer(Long.valueOf(val).intValue());
+        if (val > Integer.MAX_VALUE) {
+            return Integer.valueOf(Integer.MAX_VALUE);
+        } else if (val < Integer.MIN_VALUE) {
+            return Integer.valueOf(Integer.MIN_VALUE);
+        }
+
+        return Integer.valueOf(Long.valueOf(val).intValue());
     }
 
     /**
@@ -568,11 +662,17 @@ public final class NumberUtils {
      */
     public static Integer toInteger(final Long val) {
 
-        if (val == null) {
+    	if (val == null) {
             return null;
         }
 
-        return new Integer(val.intValue());
+        if (val.longValue() > Integer.MAX_VALUE) {
+            return Integer.valueOf(Integer.MAX_VALUE);
+        } else if (val.longValue() < Integer.MIN_VALUE) {
+            return Integer.valueOf(Integer.MIN_VALUE);
+        }
+
+        return Integer.valueOf(val.intValue());
     }
 
     /**
@@ -587,7 +687,21 @@ public final class NumberUtils {
             return null;
         }
 
-        return Integer.valueOf(org.apache.commons.lang3.math.NumberUtils.toInt(val));
+        String str = Normalizer.normalize(val, Normalizer.Form.NFKC);
+
+        if (!org.apache.commons.lang3.math.NumberUtils.isCreatable(str)) {
+            return Integer.valueOf(0);
+        }
+
+        BigDecimal decimal = new BigDecimal(val);
+        double dbl = decimal.doubleValue();
+        if (dbl > Integer.MAX_VALUE) {
+            return Integer.valueOf(Integer.MAX_VALUE);
+        } else if (dbl < Integer.MIN_VALUE) {
+            return Integer.valueOf(Integer.MIN_VALUE);
+        }
+
+        return Integer.valueOf(decimal.intValue());
     }
 
     /**
@@ -627,7 +741,13 @@ public final class NumberUtils {
     public static Integer toInteger(final BigDecimal val) {
 
         if (val == null) {
-            return Integer.valueOf(0);
+            return null;
+        }
+
+        if(val.longValue() > Integer.MAX_VALUE) {
+        	return Integer.valueOf(Integer.MAX_VALUE);
+        }else if(val.longValue() < Integer.MIN_VALUE) {
+        	return Integer.valueOf(Integer.MIN_VALUE);
         }
 
         return Integer.valueOf(val.intValue());
@@ -660,7 +780,17 @@ public final class NumberUtils {
             return null;
         }
 
-        return Long.valueOf(org.apache.commons.lang3.math.NumberUtils.toLong(val));
+        String str = Normalizer.normalize(val, Normalizer.Form.NFKC);
+
+        if (!org.apache.commons.lang3.math.NumberUtils.isCreatable(str)) {
+            return null;
+        }
+
+        try {
+            return Long.valueOf(Long.parseLong(str));
+        } catch (@SuppressWarnings("unused") NumberFormatException exc) {
+            return Long.valueOf(0);
+        }
     }
 
     /**
@@ -670,8 +800,12 @@ public final class NumberUtils {
      * @return Byteに変換したval
      */
     public static Byte toByte(final Short val) {
-        if (val == null) {
-            return Byte.valueOf((byte) 0);
+    	if (val == null) {
+            return null;
+        } else if (val.shortValue() > Byte.MAX_VALUE) {
+            return Byte.valueOf(Byte.MAX_VALUE);
+        } else if (val.shortValue() < Byte.MIN_VALUE) {
+            return Byte.valueOf(Byte.MIN_VALUE);
         }
 
         return Byte.valueOf(val.byteValue());
@@ -689,7 +823,21 @@ public final class NumberUtils {
             return 0;
         }
 
-        return org.apache.commons.lang3.math.NumberUtils.toFloat(val);
+        String str = Normalizer.normalize(val, Normalizer.Form.NFKC);
+
+        if (!org.apache.commons.lang3.math.NumberUtils.isCreatable(str)) {
+            return 0;
+        }
+
+        BigDecimal decimal = new BigDecimal(val);
+        double dbl = decimal.doubleValue();
+        if (dbl > Float.MAX_VALUE) {
+            return Float.MAX_VALUE;
+        } else if (dbl < Float.MIN_VALUE) {
+            return Float.MIN_VALUE;
+        }
+
+        return decimal.floatValue();
     }
 
     /**
