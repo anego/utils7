@@ -16,7 +16,7 @@ dependencies {
 
 ## Document
 
-[JavaDoc](./javadoc/index.html)
+[JavaDoc](https://anego.github.io/utils7/javadoc/)
 
 ## Licence
 
