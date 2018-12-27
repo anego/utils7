@@ -10,13 +10,17 @@ repositories {
 	}
 }
 dependencies {
-	compile 'io.github.anego:utils7:1.0.1'
+	compile 'io.github.anego:utils7:1.0.2'
 }
 ```
 
+## Document
+
+[JavaDoc](./javadoc/index.html)
+
 ## Licence
 
-[MIT](https://github.com/tcnksm/tool/blob/master/LICENCE)
+[MIT](https://github.com/anego/utils7/blob/master/LICENSE)
 
 ## 使用ライブラリとライセンス
 

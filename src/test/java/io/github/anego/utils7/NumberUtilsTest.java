@@ -5,8 +5,8 @@ import static org.hamcrest.MatcherAssert.*;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Modifier;
 import java.math.BigDecimal;
-import junit.framework.TestCase;
 import org.junit.Test;
+import junit.framework.TestCase;
 
 @SuppressWarnings("javadoc")
 public class NumberUtilsTest extends TestCase {
@@ -480,4 +480,30 @@ public class NumberUtilsTest extends TestCase {
         assertEquals(NumberUtils.decimalScale(1.1234d, 5), 1.12340d, 0f);
     }
 
+    @Test
+    public void testNumberOfDigits() {
+
+        assertEquals(NumberUtils.numberOfDigits(1l), 1);
+        assertEquals(NumberUtils.numberOfDigits(10l), 2);
+        assertEquals(NumberUtils.numberOfDigits(100l), 3);
+        assertEquals(NumberUtils.numberOfDigits(1000l), 4);
+        assertEquals(NumberUtils.numberOfDigits(10000l), 5);
+        assertEquals(NumberUtils.numberOfDigits(100000l), 6);
+        assertEquals(NumberUtils.numberOfDigits(1000000l), 7);
+        assertEquals(NumberUtils.numberOfDigits(10000000l), 8);
+        assertEquals(NumberUtils.numberOfDigits(100000000l), 9);
+        assertEquals(NumberUtils.numberOfDigits(1000000000l), 10);
+        assertEquals(NumberUtils.numberOfDigits(10000000000l), 11);
+        assertEquals(NumberUtils.numberOfDigits(100000000000l), 12);
+        assertEquals(NumberUtils.numberOfDigits(1000000000000l), 13);
+        assertEquals(NumberUtils.numberOfDigits(10000000000000l), 14);
+        assertEquals(NumberUtils.numberOfDigits(100000000000000l), 15);
+        assertEquals(NumberUtils.numberOfDigits(1000000000000000l), 16);
+        assertEquals(NumberUtils.numberOfDigits(10000000000000000l), 17);
+        assertEquals(NumberUtils.numberOfDigits(100000000000000000l), 18);
+        assertEquals(NumberUtils.numberOfDigits(1000000000000000000l), 19);
+        assertEquals(NumberUtils.numberOfDigits(9223372036854775807l), 19);
+        assertEquals(NumberUtils.numberOfDigits(-9223372036854775807l), 19);
+
+    }
 }

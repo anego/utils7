@@ -2,7 +2,6 @@ package io.github.anego.utils7;
 
 import java.math.BigDecimal;
 import java.text.Normalizer;
-
 import org.apache.commons.lang3.StringUtils;
 
 /**
@@ -13,7 +12,7 @@ import org.apache.commons.lang3.StringUtils;
  */
 public final class NumberUtils {
 
-	private NumberUtils() {}
+    private NumberUtils() {}
 
     /**
      * <p>
@@ -371,7 +370,7 @@ public final class NumberUtils {
      * @return 変換後
      */
     public static int toInt(final Integer val) {
-        return NumberUtils.toInt(val,0);
+        return NumberUtils.toInt(val, 0);
     }
 
     /**
@@ -454,7 +453,7 @@ public final class NumberUtils {
      */
     public static Short toShort(int val) {
 
-    	if (val > Short.MAX_VALUE) {
+        if (val > Short.MAX_VALUE) {
             return Short.valueOf(Short.MAX_VALUE);
         } else if (val < Short.MIN_VALUE) {
             return Short.valueOf(Short.MIN_VALUE);
@@ -499,7 +498,7 @@ public final class NumberUtils {
      */
     public static Short toShort(Integer val, short defaultval) {
 
-    	if (val == null) {
+        if (val == null) {
             return Short.valueOf(defaultval);
         } else if (val.intValue() > Short.MAX_VALUE) {
             return Short.valueOf(Short.MAX_VALUE);
@@ -518,7 +517,7 @@ public final class NumberUtils {
      */
     public static Short toShort(long val) {
 
-    	if (val > Short.MAX_VALUE) {
+        if (val > Short.MAX_VALUE) {
             return Short.valueOf(Short.MAX_VALUE);
         } else if (val < Short.MIN_VALUE) {
             return Short.valueOf(Short.MIN_VALUE);
@@ -534,7 +533,7 @@ public final class NumberUtils {
      * @return 変換後数値
      */
     public static Short toShort(Long val) {
-    	if (val == null) {
+        if (val == null) {
             return null;
         } else if (val.longValue() > Short.MAX_VALUE) {
             return Short.valueOf(Short.MAX_VALUE);
@@ -662,7 +661,7 @@ public final class NumberUtils {
      */
     public static Integer toInteger(final Long val) {
 
-    	if (val == null) {
+        if (val == null) {
             return null;
         }
 
@@ -744,10 +743,10 @@ public final class NumberUtils {
             return null;
         }
 
-        if(val.longValue() > Integer.MAX_VALUE) {
-        	return Integer.valueOf(Integer.MAX_VALUE);
-        }else if(val.longValue() < Integer.MIN_VALUE) {
-        	return Integer.valueOf(Integer.MIN_VALUE);
+        if (val.longValue() > Integer.MAX_VALUE) {
+            return Integer.valueOf(Integer.MAX_VALUE);
+        } else if (val.longValue() < Integer.MIN_VALUE) {
+            return Integer.valueOf(Integer.MIN_VALUE);
         }
 
         return Integer.valueOf(val.intValue());
@@ -788,7 +787,7 @@ public final class NumberUtils {
 
         try {
             return Long.valueOf(Long.parseLong(str));
-        } catch (@SuppressWarnings("unused") NumberFormatException exc) {
+        } catch (NumberFormatException exc) {
             return Long.valueOf(0);
         }
     }
@@ -800,7 +799,7 @@ public final class NumberUtils {
      * @return Byteに変換したval
      */
     public static Byte toByte(final Short val) {
-    	if (val == null) {
+        if (val == null) {
             return null;
         } else if (val.shortValue() > Byte.MAX_VALUE) {
             return Byte.valueOf(Byte.MAX_VALUE);
@@ -901,5 +900,93 @@ public final class NumberUtils {
         BigDecimal bd = BigDecimal.valueOf(val);
 
         return bd.setScale(degit, BigDecimal.ROUND_HALF_UP).doubleValue();
+    }
+
+    /**
+     * 数値の桁数取得. <br>
+     * 転載元 : https://code.i-harness.com/ja/q/13f067
+     * 
+     * @param val 調べる数値
+     * @return 桁数
+     */
+    public static int numberOfDigits(long val) {
+        long chk = val;
+        if (chk < 0) {
+            chk = chk * -1;
+        }
+        if (chk < 10000L) { // from 1 to 4
+            if (chk < 100L) { // 1 or 2
+                if (chk < 10L) {
+                    return 1;
+                } else {
+                    return 2;
+                }
+            } else { // 3 or 4
+                if (chk < 1000L) {
+                    return 3;
+                } else {
+                    return 4;
+                }
+            }
+        } else { // from 5 a 20 (albeit longs can't have more than 18 or 19)
+            if (chk < 1000000000000L) { // from 5 to 12
+                if (chk < 100000000L) { // from 5 to 8
+                    if (chk < 1000000L) { // 5 or 6
+                        if (chk < 100000L) {
+                            return 5;
+                        } else {
+                            return 6;
+                        }
+                    } else { // 7 u 8
+                        if (chk < 10000000L) {
+                            return 7;
+                        } else {
+                            return 8;
+                        }
+                    }
+                } else { // from 9 to 12
+                    if (chk < 10000000000L) { // 9 or 10
+                        if (chk < 1000000000L) {
+                            return 9;
+                        } else {
+                            return 10;
+                        }
+                    } else { // 11 or 12
+                        if (chk < 100000000000L) {
+                            return 11;
+                        } else {
+                            return 12;
+                        }
+                    }
+                }
+            } else { // from 13 to ... (18 or 20)
+                if (chk < 10000000000000000L) { // from 13 to 16
+                    if (chk < 100000000000000L) { // 13 or 14
+                        if (chk < 10000000000000L) {
+                            return 13;
+                        } else {
+                            return 14;
+                        }
+                    } else { // 15 or 16
+                        if (chk < 1000000000000000L) {
+                            return 15;
+                        } else {
+                            return 16;
+                        }
+                    }
+                } else { // from 17 to ...¿20?
+                    if (chk < 1000000000000000000L) { // 17 or 18
+                        if (chk < 100000000000000000L) {
+                            return 17;
+                        } else {
+                            return 18;
+                        }
+                    } else { // 19? Can it be?
+                        // 10000000000000000000L is'nt a chkid long.
+                        return 19;
+                    }
+                }
+            }
+        }
     }
 }

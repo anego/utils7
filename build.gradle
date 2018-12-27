@@ -43,6 +43,7 @@ defaultTasks 'clean', 'jar', 'javadoc'
 javadoc {
 	options.charSet = 'UTF-8'
 	options.encoding = 'UTF-8'
+	destinationDir = file('javadoc')
 }
 
 task sourcesJar(type: Jar, dependsOn:classes) {
